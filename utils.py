@@ -17,12 +17,12 @@ def create_face_db(face_db_path):
 
 def get_current_id(face_db_path):
     if not os.listdir(face_db_path):
-        return 1
+        return 1,[]
     else:
         list_subfolders_with_paths = [f.name for f in os.scandir(face_db_path) if
                                       f.is_dir()]
         list_id = [ int(str(subfolder).split('_')[0]) for subfolder in list_subfolders_with_paths]
         list_id = sorted(list_id)
-        return list_id[-1]
+        return list_id[-1], list_id
 def init_recognizer():
     return None
