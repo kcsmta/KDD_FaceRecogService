@@ -28,7 +28,7 @@ which can perform some simple tasks like  face detection and face recognition au
 which contains only one face to service and receive ID number equivalent to the face.
 The process of system is shown below:
 <p align="center">
-    <img src="resources/KDD_system.png" height="50%" width="50%">
+    <img src="resources/KDD_system.png" height="10%" width="10%">
 </p>
 
 All source code are available to run on 
