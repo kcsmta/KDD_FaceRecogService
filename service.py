@@ -4,7 +4,7 @@ import requests
 from flask import flash, request, redirect, render_template, send_from_directory, jsonify
 from werkzeug.utils import secure_filename
 from flask_restful import Resource, Api
-from utils import allowed_file, create_face_db, get_current_id
+from utils import *
 face_db_path = 'face_db/'
 
 app = flask.Flask(__name__, static_url_path='', static_folder='face_db/')
@@ -14,8 +14,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 ID = None
 
-def init_recognizer():
-    return None
+
 
 @app.route('/add_person/<name>', methods=['POST'])
 def add_person(name):
