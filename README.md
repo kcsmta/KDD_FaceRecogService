@@ -71,7 +71,7 @@ Update soon!
 
 <!--CONTACT -->
 ## Contact
-We are name is [Khanh Nguyen](https://www.facebook.com/khanh.nguyen.98229), 
+We are [Khanh Nguyen](https://www.facebook.com/khanh.nguyen.98229), 
   [Dat Tran](https://www.facebook.com/SoKool.HandSome.97),
   [Dan Pham](https://www.facebook.com/Pham.Dan.cntt2)\
 Project Link: https://github.com/kcsmta/KDD_FaceRecogService
