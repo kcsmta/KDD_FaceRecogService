@@ -2,7 +2,7 @@
 <!-- Project logo-->
 <p align="center">
 <a href="https://github.com/kcsmta/KDD_FaceRegcogService">
-    <img src="resources/KDD_logo.png" width="80" height="80">
+    <img src="resources/KDD_logo.png" width="100" height="100">
 </a>
 </p>
 
@@ -28,7 +28,7 @@ which can perform some simple tasks like  face detection and face recognition au
 which contains only one face to service and receive ID number equivalent to the face.
 The process of system is shown below:
 <p align="center">
-    <img src="resources/KDD_system.png" width="80" height="160">
+    <img src="resources/KDD_system.png" height="50%" width="50%">
 </p>
 
 All source code are available to run on 
@@ -61,6 +61,7 @@ source funny-face-recognition-env/bin/activate
 
 <!-- USAGE -->
 ## Usage
+Update soon!
 * Run service
 
 ```sh
@@ -73,7 +74,7 @@ source funny-face-recognition-env/bin/activate
 We are name is [Khanh Nguyen](https://www.facebook.com/khanh.nguyen.98229), 
   [Dat Tran](https://www.facebook.com/SoKool.HandSome.97),
   [Dan Pham](https://www.facebook.com/Pham.Dan.cntt2)\
-Project Link: https://github.com/kcsmta/NetTraffic_Analyzer
+Project Link: https://github.com/kcsmta/KDD_FaceRecogService
 
 
 <!-- ACKNOWLEDMENTS-->
