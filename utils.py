@@ -24,3 +24,6 @@ def get_current_id(face_db_path):
         list_id = [ int(str(subfolder).split('_')[0]) for subfolder in list_subfolders_with_paths]
         list_id = sorted(list_id)
         return list_id[-1]
+
+def init_recognizer():
+    return None
