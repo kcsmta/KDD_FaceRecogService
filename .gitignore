@@ -1,3 +1,5 @@
 /venv/
 /.idea/
 /face_db/
+*.pyc
+/face_encoder/models/20180402-114759.pb

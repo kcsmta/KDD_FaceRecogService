@@ -43,6 +43,7 @@ if __name__ == '__main__':
     face_db = load_faces(FACE_DB_PATH,facenet)
 
     print(len(face_db))
-    # test_with_cam(facenet,face_db)
-    image = cv2.imread("face_db/dan/1.jpg")
-    predict_image(image)
+    test_with_cam(facenet,face_db)
+    # image = cv2.imread("face_db/dan/0.jpg")
+    # predict_image(image)
+#

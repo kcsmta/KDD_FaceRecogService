@@ -1,4 +1,5 @@
-import cv2,sklearn
+import cv2
+import sklearn
 from sklearn import preprocessing
 from os.path import basename
 import os
