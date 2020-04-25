@@ -62,6 +62,7 @@ source funny-face-recognition-env/bin/activate
 <!-- USAGE -->
 ## Usage
 Update soon!
+* Get facenet model from this link: https://bit.ly/2yMpY51  
 * Run service
 
 ```sh
@@ -74,8 +75,7 @@ Update soon!
 We are [Khanh Nguyen](https://www.facebook.com/khanh.nguyen.98229), 
   [Dat Tran](https://www.facebook.com/SoKool.HandSome.97),
   [Dan Pham](https://www.facebook.com/Pham.Dan.cntt2)\
-Project Link: https://github.com/kcsmta/KDD_FaceRecogService  
-Facenet model's weights link:  https://bit.ly/2yMpY51 
+Project Link: https://github.com/kcsmta/KDD_FaceRecogService   
 <!-- ACKNOWLEDMENTS-->
 ## Acknowledments
 * [MTCNN]()
