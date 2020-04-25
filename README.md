@@ -74,9 +74,8 @@ Update soon!
 We are [Khanh Nguyen](https://www.facebook.com/khanh.nguyen.98229), 
   [Dat Tran](https://www.facebook.com/SoKool.HandSome.97),
   [Dan Pham](https://www.facebook.com/Pham.Dan.cntt2)\
-Project Link: https://github.com/kcsmta/KDD_FaceRecogService
-
-
+Project Link: https://github.com/kcsmta/KDD_FaceRecogService  
+Facenet model's weights link:  https://drive.google.com/drive/folders/15zTCV7CB83Q42-2YphAeAgU0Bkj5aUqa?usp=sharing  
 <!-- ACKNOWLEDMENTS-->
 ## Acknowledments
 * [MTCNN]()
