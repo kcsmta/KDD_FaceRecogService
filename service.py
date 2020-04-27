@@ -85,7 +85,7 @@ def predict_img():
                         face_image = img[y1:y2, x1:x2]
                         names, sims = predict(face_image, facenet, face_db,
                                               VERIFICATION_THRESHOLD=0.5)
-                    result[filename] = names, sims
+                    result[filename] = len(names), names, sims
             return jsonify(str(result)), 200
 
 
