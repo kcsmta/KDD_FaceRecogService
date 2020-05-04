@@ -93,4 +93,4 @@ if __name__ == '__main__':
     create_folder(face_db_path, predict_path)
     mtcnn_detector, facenet, face_db = init_recognizer()
     ID, list_id = get_current_id(face_db_path)
-    app.run(debug=app.config['DEBUG'])
+    app.run(debug=app.config['DEBUG'], use_reloader=False)
