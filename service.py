@@ -1,3 +1,5 @@
+#! /home/trandat/project/jetson_device/KDD_FaceRecogService/venv/bin/python3
+
 import shutil
 
 import cv2
@@ -6,6 +8,7 @@ from flask import request, jsonify
 from werkzeug.utils import secure_filename
 from face_encoder.support import  predict
 from utils import *
+from waitress import serve
 
 face_db_path = 'face_db/'
 predict_path = 'predict/'
@@ -87,10 +90,9 @@ def predict_img():
                                               VERIFICATION_THRESHOLD=0.5)
                     result[filename] = len(names), names, sims
             return jsonify(str(result)), 200
-
-
 if __name__ == '__main__':
     create_folder(face_db_path, predict_path)
     mtcnn_detector, facenet, face_db = init_recognizer()
     ID, list_id = get_current_id(face_db_path)
-    app.run(debug=app.config['DEBUG'], use_reloader=False)
+    # app.run(debug=app.config['DEBUG'], use_reloader=False)
+    serve(app, host='0.0.0.0', port=8000)

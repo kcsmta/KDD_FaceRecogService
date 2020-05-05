@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:5000/predict"
+url = "http://localhost:8000/predict"
 
 files = [('file', open('0.jpg','rb'))]
 
