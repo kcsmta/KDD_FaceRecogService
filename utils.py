@@ -11,7 +11,7 @@ def allowed_file(filename):
         1].lower() in ALLOWED_EXTENSIONS
 
 
-def create_folder(face_db_path, predict_path):
+def create_folder(face_db_path, predict_path, temp_path):
     if not os.path.exists(face_db_path):
         try:
             os.makedirs(face_db_path)
@@ -22,7 +22,11 @@ def create_folder(face_db_path, predict_path):
             os.makedirs(predict_path)
         except OSError:
             raise OSError
-
+    if not os.path.exists(temp_path):
+        try:
+            os.makedirs(temp_path)
+        except OSError:
+            raise OSError
 def get_current_id(face_db_path):
     if not os.listdir(face_db_path):
         return 1,[]

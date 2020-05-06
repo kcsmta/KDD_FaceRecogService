@@ -1,7 +1,4 @@
-#! /home/trandat/project/jetson_device/KDD_FaceRecogService/venv/bin/python3
-
 import shutil
-
 import cv2
 import flask
 from flask import request, jsonify
@@ -12,6 +9,7 @@ from waitress import serve
 
 face_db_path = 'face_db/'
 predict_path = 'predict/'
+temp_path = 'temp/'
 ID = None
 list_id = None
 mtcnn_detector, facenet, face_db = None, None, None
@@ -27,8 +25,12 @@ def add_person():
     global ID, list_id
     if request.method == 'POST':
         files = request.files.getlist('file')
-        if len(files) == 0:
+        if request.files['file'].filename=='':
             return jsonify(message='No file selected for uploading'), 400
+        elif 'name' not in request.form:
+            return jsonify(message='Bad request! No name exist!'), 400
+        elif request.form['name']=='':
+            return jsonify(message='Bad request! Name is empty!'), 400
         else:
             name = request.form['name']
             folder_new_person = os.path.join(face_db_path, str(ID) + '_' + name)
@@ -47,17 +49,20 @@ def add_person():
 
 @app.route('/del_person', methods=['GET'])
 def del_person():
-    id_person = request.form['id_person']
-    global list_id
-    if not int(id_person):
-        return jsonify(message='id_person must be integer'), 400
-    if int(id_person) in list_id:
-        for folder in os.scandir(face_db_path):
-            if int(str(folder.name).split('_')[0]) == int(id_person):
-                shutil.rmtree(folder)
-                return jsonify(message='delete on id_person ' + id_person), 200
+    if 'id_person' not in request.form:
+        return jsonify(message='Bad request! No id_person exist!'), 400
     else:
-        return jsonify(message='id does not exist'), 400
+        id_person = request.form['id_person']
+        global list_id
+        if not int(id_person):
+            return jsonify(message='id_person must be integer'), 400
+        if int(id_person) in list_id:
+            for folder in os.scandir(face_db_path):
+                if int(str(folder.name).split('_')[0]) == int(id_person):
+                    shutil.rmtree(folder)
+                    return jsonify(message='delete on id_person ' + id_person), 200
+        else:
+            return jsonify(message='id does not exist'), 400
 
 
 @app.route('/predict', methods=['POST'])
@@ -65,8 +70,9 @@ def predict_img():
     global mtcnn_detector, facenet, face_db
     if request.method == 'POST':
         files = request.files.getlist('file')
+        # print(request.files['file'].filename)
         # thresh = request.form['thresh']
-        if len(files) == 0:
+        if request.files['file'].filename=='':
             return jsonify(message='No file selected for predict'), 400
         else:
             result = {}
@@ -91,7 +97,7 @@ def predict_img():
                     result[filename] = len(names), names, sims
             return jsonify(str(result)), 200
 if __name__ == '__main__':
-    create_folder(face_db_path, predict_path)
+    create_folder(face_db_path, predict_path, temp_path)
     mtcnn_detector, facenet, face_db = init_recognizer()
     ID, list_id = get_current_id(face_db_path)
     # app.run(debug=app.config['DEBUG'], use_reloader=False)

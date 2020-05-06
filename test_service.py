@@ -1,6 +1,6 @@
 import requests
 
-url = "http://localhost:8000/predict"
+url = "http://192.168.1.109:8000/predict"
 
 files = [('file', open('0.jpg','rb'))]
 
