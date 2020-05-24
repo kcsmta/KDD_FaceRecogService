@@ -20,22 +20,34 @@ def convert_image(nimg):
 
 def load_faces(faces_dir,model):
     # file_emb = open("embreal0.txt", "w+")
-    face_db = []
-    for root, _, files in os.walk(faces_dir):
-        index = 1
-        for file in files:
-            nimg = readImage(os.path.join(root, file))
-            name = basename(root)
-            input_image = np.expand_dims(nimg,axis=0)
-            emb_array = model.runEmbedd(input_image)
-            embedding = sklearn.preprocessing.normalize(emb_array).flatten()
-            # file_emb.writelines(str(embedding).replace("\n"," ").replace("[", "").replace("]", "") +",0\n")
-            face_db.append({
-                "name": name + "_" + str(index),
-                "feature": embedding
-            })
-            index = index + 1
-    return face_db
+    if os.path.exists('temp.npy'):
+        face_db = np.load('temp.npy')
+    else:
+        face_db = []
+        face_db = np.array(face_db)
+
+    if os.path.exists('name.npy'):
+        face_db_name = np.load('name.npy')
+    else:
+        face_db_name = []
+        face_db_name = np.array(face_db_name)
+
+    # for root, _, files in os.walk(faces_dir):
+    #     index = 1
+    #     for file in files:
+    #         nimg = readImage(os.path.join(root, file))
+    #         name = basename(root)
+    #         input_image = np.expand_dims(nimg,axis=0)
+    #         emb_array = model.runEmbedd(input_image)
+    #         embedding = sklearn.preprocessing.normalize(emb_array).flatten()
+    #         # file_emb.writelines(str(embedding).replace("\n"," ").replace("[", "").replace("]", "") +",0\n")
+    #         face_db.append({
+    #             "name": name + "_" + str(index),
+    #             "feature": embedding
+    #         })
+    #         index = index + 1
+    # np.save('temp.npy',face_db)
+    return face_db,face_db_name
 
 def feature_compare(feature1, feature2):
     dist = np.sum(np.square(feature1- feature2))

@@ -42,5 +42,5 @@ def init_recognizer():
     conf = configparser.ConfigParser()
     conf.read("config/global.cfg")
     FACE_DB_PATH = conf.get("PATH", "FACE_DB_PATH")
-    face_db = load_faces(FACE_DB_PATH, facenet)
-    return mtcnn_detector, facenet, face_db
+    face_db,face_db_name = load_faces(FACE_DB_PATH, facenet)
+    return mtcnn_detector, facenet, face_db,face_db_name
