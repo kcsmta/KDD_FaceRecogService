@@ -1,4 +1,6 @@
 import shutil
+import time
+
 import cv2
 import flask
 from flask import request, jsonify
@@ -45,6 +47,7 @@ def add_person():
             ID = ID + 1
             os.makedirs(folder_new_person)
             result = {}
+            detail = {}
             for file in files:
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
@@ -59,7 +62,7 @@ def add_person():
                     img = cv2.imread(path_temp)
                     faces, _ = mtcnn_detector.detect(img)
                     if len(faces) != 1:
-                        result[file.filename] = 'Image must have only 1 face!'
+                        detail[file.filename] = 'Image must have only 1 face!'
                         # os.remove(path_temp)
                     else:
                         x1, y1, x2, y2 = int(faces[0][0]), int(
@@ -67,18 +70,20 @@ def add_person():
                                 faces[0][2]), int(faces[0][3])
                         # print('face size ', y2-y1, x2-x1)
                         if y2 - y1 < 161 or x2 - x1 < 161:
-                            result[file.filename] = 'Need bigger face in image!'
+                            detail[file.filename] = 'Need bigger face in image!'
                             # os.remove(path_temp)
                         else:
                             face_image = img[y1:y2, x1:x2]
                             cv2.imwrite(path_to_file, face_image)
-                            result[file.filename] = 'Success'
+                            detail[file.filename] = 'Success'
                     os.remove(path_temp)
             if len(os.listdir(folder_new_person)) != 0:
                 list_id.append(ID)
+                result = {'status':'success','id':str(ID),'detail':detail}
             else:
                 ID = ID -1
                 os.rmdir(folder_new_person)
+                result = {'status': 'fail', 'id': str(-1), 'detail': detail}
             return jsonify(result), 200
 
 
@@ -112,6 +117,7 @@ def predict_img():
             return jsonify(message='No file selected for predict'), 400
         else:
             result = {}
+            start = time.time()
             for file in files:
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
@@ -131,6 +137,12 @@ def predict_img():
                         names, sims = predict(face_image, facenet, face_db,
                                               VERIFICATION_THRESHOLD=0.5)
                     result[filename] = len(names), names, sims
+            end = time.time()
+            run_time = end-start
+            time_sleep = 0.5*len(files)- run_time
+            print(run_time,time_sleep)
+            if time_sleep>0:
+                time.sleep(time_sleep)
             return jsonify(str(result)), 200
 
 
