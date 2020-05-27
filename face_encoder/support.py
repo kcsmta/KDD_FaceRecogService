@@ -20,14 +20,14 @@ def convert_image(nimg):
 
 def load_faces(faces_dir,model):
     # file_emb = open("embreal0.txt", "w+")
-    if os.path.exists('temp.npy'):
-        face_db = np.load('temp.npy')
+    if os.path.exists('face_db_embed.npy'):
+        face_db = np.load('face_db_embed.npy')
     else:
         face_db = []
         face_db = np.array(face_db)
 
-    if os.path.exists('name.npy'):
-        face_db_name = np.load('name.npy')
+    if os.path.exists('face_db_name.npy'):
+        face_db_name = np.load('face_db_name.npy')
     else:
         face_db_name = []
         face_db_name = np.array(face_db_name)
@@ -46,7 +46,7 @@ def load_faces(faces_dir,model):
     #             "feature": embedding
     #         })
     #         index = index + 1
-    # np.save('temp.npy',face_db)
+    # np.save('face_db_embed.npy',face_db)
     return face_db,face_db_name
 
 def feature_compare(feature1, feature2):

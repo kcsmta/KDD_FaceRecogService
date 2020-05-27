@@ -66,6 +66,7 @@ def add_person():
                     if os.path.isfile(path_temp):
                         os.remove(path_temp)
                     file.save(path_temp)
+                    print(request.files['file'].read())
                     img = cv2.imread(path_temp)
                     faces, _ = mtcnn_detector.detect(img)
                     if len(faces) != 1:
@@ -87,14 +88,14 @@ def add_person():
                                 "name":save_name,
                                 "feature": embedding
                             })
-                            np.save('temp.npy',face_db)
+                            np.save('face_db_embed.npy',face_db)
                             skip = False
                             cv2.imwrite(path_to_file, face_image)
                             detail[file.filename] = 'Success'
                     os.remove(path_temp)
             if not skip:
                 face_db_name = np.append(face_db_name, save_name)
-                np.save('name.npy', face_db_name)
+                np.save('face_db_name.npy', face_db_name)
             if len(os.listdir(folder_new_person)) != 0:
                 list_id.append(ID)
                 result = {'status':'success','id':str(ID),'detail':detail}
@@ -122,8 +123,8 @@ def del_person():
         for index, element in enumerate(face_db_name):
             if element.split('_')[0] == id_person:
                 face_db_name = np.delete(face_db_name, index)
-        np.save('name.npy', face_db_name)
-        np.save('temp.npy',face_db)
+        np.save('face_db_name.npy', face_db_name)
+        np.save('face_db_embed.npy',face_db)
         if int(id_person) in list_id:
             for folder in os.scandir(face_db_path):
                 if int(str(folder.name).split('_')[0]) == int(id_person):
