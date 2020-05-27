@@ -27,15 +27,12 @@ def create_folder(face_db_path, predict_path, temp_path):
             os.makedirs(temp_path)
         except OSError:
             raise OSError
-def get_current_id(face_db_path):
-    if not os.listdir(face_db_path):
-        return 1,[]
-    else:
-        list_subfolders_with_paths = [f.name for f in os.scandir(face_db_path) if
-                                      f.is_dir()]
-        list_id = [ int(str(subfolder).split('_')[0]) for subfolder in list_subfolders_with_paths]
-        list_id = sorted(list_id)
-        return list_id[-1]+1, list_id
+def get_current_id(face_db_name):
+    if len(face_db_name)==0:
+        return 0
+    ID  = int(face_db_name[-1].split("_")[0])+1
+    print("START ID = ",ID)
+    return ID
 def init_recognizer():
     mtcnn_detector = load_mtcnn(scale_factor=0.709)
     facenet = Facenet("face_encoder/models/20180402-114759.pb")

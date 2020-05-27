@@ -9,7 +9,7 @@ from face_encoder.support import predict,face_frame_embedding
 from utils import *
 from waitress import serve
 import numpy as np
-
+import io
 face_db_path = 'face_db/'
 predict_path = 'predict/'
 temp_path = 'temp/'
@@ -31,9 +31,6 @@ def get_all():
     for index,element in enumerate(face_db_name):
         result[""+str(index)] = element
     return jsonify(result)
-    for subfolder in list_subfolders_with_paths:
-        result[str(subfolder).split('_')[0]] = str(subfolder).split('_')[1]
-    return jsonify(result)
 
 @app.route('/add_person', methods=['POST'])
 def add_person():
@@ -48,38 +45,27 @@ def add_person():
             return jsonify(message='Bad request! Name is empty!'), 400
         else:
             name = request.form['name']
-            folder_new_person = os.path.join(face_db_path, str(ID) + '_' + name)
             save_name = str(ID) + '_' + name
             ID = ID + 1
-            os.makedirs(folder_new_person)
             result = {}
             detail = {}
             skip = True
             for file in files:
                 if file and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    path_to_file = os.path.join(
-                            folder_new_person, filename)
-                    print(path_to_file)
-                    path_temp = os.path.join(
-                            temp_path, filename)
-                    if os.path.isfile(path_temp):
-                        os.remove(path_temp)
-                    file.save(path_temp)
-                    print(request.files['file'].read())
-                    img = cv2.imread(path_temp)
+                    in_memory_file = io.BytesIO()
+                    file.save(in_memory_file)
+                    data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
+                    color_image_flag = 1
+                    img = cv2.imdecode(data, color_image_flag)
                     faces, _ = mtcnn_detector.detect(img)
                     if len(faces) != 1:
                         detail[file.filename] = 'Image must have only 1 face!'
-                        # os.remove(path_temp)
                     else:
                         x1, y1, x2, y2 = int(faces[0][0]), int(
                                 faces[0][1]), int(
                                 faces[0][2]), int(faces[0][3])
-                        # print('face size ', y2-y1, x2-x1)
                         if y2 - y1 < 161 or x2 - x1 < 161:
                             detail[file.filename] = 'Need bigger face in image!'
-                            # os.remove(path_temp)
                         ### save and add embedding to numppy array here
                         else:
                             face_image = img[y1:y2, x1:x2]
@@ -90,18 +76,14 @@ def add_person():
                             })
                             np.save('face_db_embed.npy',face_db)
                             skip = False
-                            cv2.imwrite(path_to_file, face_image)
                             detail[file.filename] = 'Success'
-                    os.remove(path_temp)
             if not skip:
                 face_db_name = np.append(face_db_name, save_name)
                 np.save('face_db_name.npy', face_db_name)
-            if len(os.listdir(folder_new_person)) != 0:
-                list_id.append(ID)
+                # list_id.append(ID)
                 result = {'status':'success','id':str(ID),'detail':detail}
             else:
                 ID = ID -1
-                os.rmdir(folder_new_person)
                 result = {'status': 'fail', 'id': str(-1), 'detail': detail}
             return jsonify(result), 200
 
@@ -117,20 +99,22 @@ def del_person():
         if not int(id_person):
             return jsonify(message='id_person must be integer'), 400
         ## delete in numpy array and save
+        print("id_person",id_person)
+        exits = False
+        temp_idx = 0
         for index, element in enumerate(face_db):
             if element['name'].split('_')[0] == id_person:
-                face_db = np.delete(face_db, index)
+                face_db = np.delete(face_db, index-temp_idx)
+                temp_idx = temp_idx + 1
         for index, element in enumerate(face_db_name):
             if element.split('_')[0] == id_person:
+                exits=True
+                print(face_db_name," ",index)
                 face_db_name = np.delete(face_db_name, index)
         np.save('face_db_name.npy', face_db_name)
         np.save('face_db_embed.npy',face_db)
-        if int(id_person) in list_id:
-            for folder in os.scandir(face_db_path):
-                if int(str(folder.name).split('_')[0]) == int(id_person):
-                    shutil.rmtree(folder)
-                    return jsonify(
-                        message='delete on id_person ' + id_person), 200
+        if exits:
+            return jsonify(message='delete on id_person ' + id_person), 200
         else:
             return jsonify(message='id does not exist'), 400
 
@@ -150,13 +134,11 @@ def predict_img():
             for file in files:
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
-                    path_to_file = os.path.join(
-                            predict_path, filename)
-                    print(path_to_file)
-                    if os.path.isfile(path_to_file):
-                        os.remove(path_to_file)
-                    file.save(path_to_file)
-                    img = cv2.imread(path_to_file)
+                    in_memory_file = io.BytesIO()
+                    file.save(in_memory_file)
+                    data = np.fromstring(in_memory_file.getvalue(), dtype=np.uint8)
+                    color_image_flag = 1
+                    img = cv2.imdecode(data, color_image_flag)
                     faces, _ = mtcnn_detector.detect(img)
                     names, sims = [], []
                     for face in faces:
@@ -178,7 +160,7 @@ def predict_img():
 if __name__ == '__main__':
     create_folder(face_db_path, predict_path, temp_path)
     mtcnn_detector, facenet, face_db,face_db_name = init_recognizer()
-    ID, list_id = get_current_id(face_db_path)
+    ID = get_current_id(face_db_name)
     # app.run(debug=app.config['DEBUG'], use_reloader=False)
     # app.run(debug=True)
     # serve(app, host='0.0.0.0', port=8000)
