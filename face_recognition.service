@@ -1,0 +1,13 @@
+[Unit]
+Description=face recognition on jetson nano service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=admin
+ExecStart=/usr/bin/python3 /home/fitmta/project/KDD_FaceRecogService/service.py
+
+[Install]
+WantedBy=multi-user.target
