@@ -5,7 +5,7 @@ from os.path import basename
 import os
 import numpy as np
 
-def readImage(path):
+def read_image(path):
     nimg = cv2.imread(path)
     nimg = cv2.resize(nimg,(160,160))
     nimg = nimg - 127.5
@@ -21,32 +21,16 @@ def convert_image(nimg):
 def load_faces(faces_dir,model):
     # file_emb = open("embreal0.txt", "w+")
     if os.path.exists('face_db_embed.npy'):
-        face_db = np.load('face_db_embed.npy')
+        face_db = np.load('face_db_embed.npy', allow_pickle=True)
     else:
         face_db = []
         face_db = np.array(face_db)
 
     if os.path.exists('face_db_name.npy'):
-        face_db_name = np.load('face_db_name.npy')
+        face_db_name = np.load('face_db_name.npy', allow_pickle=True)
     else:
         face_db_name = []
         face_db_name = np.array(face_db_name)
-
-    # for root, _, files in os.walk(faces_dir):
-    #     index = 1
-    #     for file in files:
-    #         nimg = readImage(os.path.join(root, file))
-    #         name = basename(root)
-    #         input_image = np.expand_dims(nimg,axis=0)
-    #         emb_array = model.runEmbedd(input_image)
-    #         embedding = sklearn.preprocessing.normalize(emb_array).flatten()
-    #         # file_emb.writelines(str(embedding).replace("\n"," ").replace("[", "").replace("]", "") +",0\n")
-    #         face_db.append({
-    #             "name": name + "_" + str(index),
-    #             "feature": embedding
-    #         })
-    #         index = index + 1
-    # np.save('face_db_embed.npy',face_db)
     return face_db,face_db_name
 
 def feature_compare(feature1, feature2):
@@ -80,5 +64,5 @@ def predict(face_image,facenet,face_db,VERIFICATION_THRESHOLD=0.5):
             name = "unknown"
             sim = 0
         names.append(name)
-        sims.append(sim)
+        sims.append(sim[0] if sim!=0 else 0)
     return names, sims
