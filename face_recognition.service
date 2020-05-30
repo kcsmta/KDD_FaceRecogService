@@ -8,6 +8,7 @@ Restart=always
 RestartSec=1
 User=admin
 ExecStart=/usr/bin/python3 /home/fitmta/project/KDD_FaceRecogService/service.py
+WorkingDirectory=/home/fitmta/project/KDD_FaceRecogService
 
 [Install]
 WantedBy=multi-user.target
