@@ -7,7 +7,6 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=1
-User=admin
 WorkingDirectory=/home/fitmta/project/KDD_FaceRecogService
 ExecStart=/usr/bin/python3 /home/fitmta/project/KDD_FaceRecogService/service.py
 
