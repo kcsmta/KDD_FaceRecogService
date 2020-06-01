@@ -1,4 +1,5 @@
 import shutil
+import subprocess
 import time
 
 import cv2
@@ -20,6 +21,24 @@ app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # max 200mb in a request
 app.config["DEBUG"] = True  # for debug
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
+@app.route('/set_ip', methods=['POST'])
+def set_ip():
+    if 'ip' not in request.form:
+        return jsonify(message='Bad request! No ip exist!'), 400
+    else:
+        process1 = subprocess.Popen(
+                ['sudo', 'ip', 'addr', 'flush', 'dev', 'eth0'])
+        process1.communicate()
+        ip = request.form['ip']
+        process = subprocess.Popen(
+                ['sudo', 'ip', 'addr', 'replace', ip + '/24', 'dev',
+                 'eth0'])
+        process.communicate()
+        process2 = subprocess.Popen(
+                ['sudo', 'ip', 'addr', 'replace', '192.168.1.102/24', 'dev',
+                 'eth0'])
+        process2.communicate()
+        return jsonify(message='add ip address success!'), 200
 
 @app.route('/get_all', methods=['GET'])
 def get_all():
