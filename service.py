@@ -15,7 +15,7 @@ import io
 ID = None
 list_id = None
 mtcnn_detector, facenet, face_db, face_db_name = None, None, None, None
-default_ip = '192.168.1.150'
+default_ip = '192.168.20.20'
 
 app = flask.Flask(__name__, static_url_path='', static_folder='')
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # max 200mb in a request
