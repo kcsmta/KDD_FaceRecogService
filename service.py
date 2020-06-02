@@ -181,7 +181,7 @@ def init_ip():
     else:
         with open('ip.txt','r+') as f_read:
             ip = f_read.read()
-            print(ip)
+            # print(ip)
             process = subprocess.Popen(
                     ['sudo', 'ip', 'addr', 'replace', ip + '/24', 'dev',
                      'eth0'])
