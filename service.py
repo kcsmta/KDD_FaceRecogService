@@ -15,6 +15,7 @@ import io
 ID = None
 list_id = None
 mtcnn_detector, facenet, face_db, face_db_name = None, None, None, None
+default_ip = '192.168.1.150'
 
 app = flask.Flask(__name__, static_url_path='', static_folder='')
 app.config['MAX_CONTENT_LENGTH'] = 200 * 1024 * 1024  # max 200mb in a request
@@ -34,8 +35,10 @@ def set_ip():
                 ['sudo', 'ip', 'addr', 'replace', ip + '/24', 'dev',
                  'eth0'])
         process.communicate()
+        with open('ip.txt', 'w+') as f_write:
+            f_write.write(ip)
         process2 = subprocess.Popen(
-                ['sudo', 'ip', 'addr', 'replace', '192.168.1.102/24', 'dev',
+                ['sudo', 'ip', 'addr', 'replace', default_ip+'/24', 'dev',
                  'eth0'])
         process2.communicate()
         return jsonify(message='add ip address success!'), 200
@@ -172,8 +175,20 @@ def predict_img():
                 time.sleep(time_sleep)
             return jsonify(str(result)), 200
 
-
+def init_ip():
+    if not os.path.isfile('ip.txt'):
+        return
+    else:
+        with open('ip.txt','r+') as f_read:
+            ip = f_read.read()
+            print(ip)
+            process = subprocess.Popen(
+                    ['sudo', 'ip', 'addr', 'replace', ip + '/24', 'dev',
+                     'eth0'])
+            process.communicate()
+            return
 if __name__ == '__main__':
+    init_ip()
     mtcnn_detector, facenet, face_db, face_db_name = init_recognizer()
     ID = get_current_id(face_db_name)
     # app.run(debug=app.config['DEBUG'], use_reloader=False)
