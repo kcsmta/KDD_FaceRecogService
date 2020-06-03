@@ -65,8 +65,8 @@ def add_person():
             return jsonify(message='Bad request! Name is empty!'), 400
         else:
             name = request.form['name']
-            ID = ID + 1
             save_name = str(ID) + '_' + name
+            ID = ID + 1
             detail = {}
             skip = True
             for file in files:
