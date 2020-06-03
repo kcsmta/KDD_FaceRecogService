@@ -48,7 +48,7 @@ def get_all():
     global face_db_name
     result = {}
     for index, element in enumerate(face_db_name):
-        result["" + str(index)] = element
+        result["" + str(index+1)] = element
     return jsonify(result)
 
 
@@ -101,7 +101,7 @@ def add_person():
             if not skip:
                 face_db_name = np.append(face_db_name, save_name)
                 np.save('face_db_name.npy', face_db_name)
-                result = {'status': 'success', 'id': str(ID), 'detail': detail}
+                result = {'status': 'success', 'id': str(ID-1), 'detail': detail}
             else:
                 ID = ID - 1
                 result = {'status': 'fail', 'id': str(-1), 'detail': detail}

@@ -14,7 +14,7 @@ def allowed_file(filename):
 
 def get_current_id(face_db_name):
     if len(face_db_name) == 0:
-        return 0
+        return 1
     ID = int(face_db_name[-1].split("_")[0]) + 1
     return ID
 
